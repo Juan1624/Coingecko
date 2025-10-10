@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CryptoApp - CoinGecko</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Contenedor principal -->
+  <main id="root">
+    <h2>Bienvenido a CryptoApp 💰</h2>
+    <p>Selecciona una pestaña del menú para comenzar.</p>
+  </main>
+
+  <!-- Menú inferior -->
+  <nav class="menu">
+    <button onclick="Inicio()">🏠 Inicio</button>
+    <button onclick="Buscar()">🔍 Buscar</button>
+    <button onclick="Favoritos()">❤️ Favoritos</button>
+    <button onclick="Curiosidades()">💡 Curiosidades</button>
+    <button onclick="Info()">ℹ️ Info</button>
+  </nav>
+
+  <!-- Scripts (en el mismo orden de carga que las pestañas) -->
+  <script src="js/inicio.js"></script>
+  <script src="js/buscar.js"></script>
+  <script src="js/detalle.js"></script>
+  <script src="js/favoritos.js"></script>
+  <script src="js/curiosidades.js"></script>
+  <script>
+    // pestaña original extra (información general del proyecto)
+    function Info() {
+      const root = document.getElementById("root");
+      root.innerHTML = `
+        <section class="info">
+          <h2>ℹ️ Sobre esta App</h2>
+          <p>Esta aplicación usa la API pública de <b>CoinGecko</b> para mostrar información actualizada del mundo de las criptomonedas.</p>
+          <p>Creado con JavaScript puro, sin frameworks, cumpliendo las reglas del proyecto (solo 1 HTML y sin contenido estático).</p>
+          <p>Desarrollador: <b>Juan Esteban Arias Díaz</b></p>
+        </section>
+      `;
+    }
+  </script>
+</body>
+</html>
