@@ -22,25 +22,12 @@
     <button onclick="Info()">ℹ️ Info</button>
   </nav>
 
-  <!-- Scripts (en el mismo orden de carga que las pestañas) -->
+  <!-- Scripts (en orden de carga) -->
   <script src="js/inicio.js"></script>
   <script src="js/buscar.js"></script>
   <script src="js/detalle.js"></script>
   <script src="js/favoritos.js"></script>
   <script src="js/curiosidades.js"></script>
-  <script>
-    // pestaña original extra (información general del proyecto)
-    function Info() {
-      const root = document.getElementById("root");
-      root.innerHTML = `
-        <section class="info">
-          <h2>ℹ️ Sobre esta App</h2>
-          <p>Esta aplicación usa la API pública de <b>CoinGecko</b> para mostrar información actualizada del mundo de las criptomonedas.</p>
-          <p>Creado con JavaScript puro, sin frameworks, cumpliendo las reglas del proyecto (solo 1 HTML y sin contenido estático).</p>
-          <p>Desarrollador: <b>Juan Esteban Arias Díaz</b></p>
-        </section>
-      `;
-    }
-  </script>
+  <script src="js/info.js"></script>
 </body>
 </html>

@@ -1,23 +1,27 @@
 async function Inicio() {
     const root = document.getElementById("root");
-    root.innerHTML = "<h2>💰 Criptomonedas principales</h2>";
+    root.innerHTML = `
+        <h2>💰 Criptomonedas principales</h2>
+        <div class="filtro-container">
+            <label for="filtroCategoria">Filtrar por categoría:</label>
+            <select id="filtroCategoria" onchange="filtrarCategoria()">
+                <option value="">-- Todas --</option>
+            </select>
+        </div>
+        <div id="listaCriptos" class="grid-criptos"></div>
+    `;
 
     // Cargar categorías
     const catRes = await fetch("https://api.coingecko.com/api/v3/coins/categories");
     const categorias = await catRes.json();
 
-    // Crear select de categorías
-    let selectHTML = `<label for="filtroCategoria">Filtrar por categoría:</label>
-                      <select id="filtroCategoria" onchange="filtrarCategoria()">
-                      <option value="">-- Todas --</option>`;
-
+    const select = document.getElementById("filtroCategoria");
     categorias.forEach(cat => {
-        selectHTML += `<option value="${cat.id}">${cat.name}</option>`;
+        const option = document.createElement("option");
+        option.value = cat.id;
+        option.textContent = cat.name;
+        select.appendChild(option);
     });
-    selectHTML += `</select>`;
-
-    root.innerHTML += selectHTML;
-    root.innerHTML += `<div id="listaCriptos"></div>`;
 
     // Cargar criptos iniciales
     cargarCriptos();
@@ -25,11 +29,11 @@ async function Inicio() {
 
 async function cargarCriptos(categoria = "") {
     const contenedor = document.getElementById("listaCriptos");
-    contenedor.innerHTML = "Cargando criptos...";
+    contenedor.innerHTML = "<p>Cargando criptos...</p>";
 
-    let url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=20";
+    let url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=20`;
     if (categoria) {
-        url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=${categoria}&per_page=20`;
+        url += `&category=${categoria}`;
     }
 
     const res = await fetch(url);
@@ -38,11 +42,12 @@ async function cargarCriptos(categoria = "") {
     contenedor.innerHTML = "";
     data.forEach(c => {
         contenedor.innerHTML += `
-          <div class="card" onclick="Detalle('${c.id}')">
-            <img src="${c.image}" height="60">
-            <p>${c.name}</p>
-            <p>$${c.current_price.toLocaleString()}</p>
-          </div>`;
+            <div class="card" onclick="Detalle('${c.id}')">
+                <img src="${c.image}" height="60">
+                <p class="nombre">${c.name}</p>
+                <p class="precio">$${c.current_price.toLocaleString()}</p>
+            </div>
+        `;
     });
 }
 
