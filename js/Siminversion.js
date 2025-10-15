@@ -1,94 +1,69 @@
-// ====== SIMULADOR DE INVERSIÓN ======
+async function Siminversion() {
+    const root = document.getElementById("root");
+    root.innerHTML = `
+        <h2>💸 Simulador de Inversión</h2>
+        <p>Simula cuánto habrías ganado si invertías en una criptomoneda hace 7 días.</p>
 
-// Genera la lista de criptomonedas
-function GenerarLista(cryptos) {
-  let listaHTML = "";
-  for (let i = 0; i < cryptos.length; i++) {
-    const c = cryptos[i];
-    listaHTML += `
-      <div class="c-lista-crypto" onclick="Simular('${c.id}', '${c.name}', ${c.current_price})">
-          <img src="${c.image}" height="60" alt="${c.name}">
-          <p>${c.name}</p>
-          <p>$${c.current_price.toLocaleString()}</p>
-      </div>`;
-  }
-  return listaHTML;
-}
+        <div class="sim-card">
+            <label for="moneda">Selecciona una criptomoneda:</label>
+            <select id="moneda">
+                <option value="bitcoin">Bitcoin</option>
+                <option value="ethereum">Ethereum</option>
+                <option value="solana">Solana</option>
+                <option value="dogecoin">Dogecoin</option>
+                <option value="cardano">Cardano</option>
+            </select>
 
-// Función principal de la pestaña
-async function Curiosidades() {
-  const root = document.getElementById("root");
-  root.innerHTML = "<h2>💸 Simulador de inversión</h2><p>Selecciona una criptomoneda para ver cuánto ganarías o perderías en 7 días.</p>";
+            <label for="monto">Monto invertido (USD):</label>
+            <input type="number" id="monto" placeholder="Ej: 100" min="1">
 
-  const res = await fetch("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=20");
-  const data = await res.json();
+            <button id="btnSimular">Simular</button>
+        </div>
 
-  // Buscador
-  const buscador = document.createElement("input");
-  buscador.classList.add("c-buscador");
-  buscador.type = "text";
-  buscador.placeholder = "Buscar criptomoneda...";
-  buscador.addEventListener("input", () => buscadorFuncion(buscador.value, data));
+        <div id="resultado" class="sim-resultado"></div>
+    `;
 
-  // Lista inicial
-  const contenedorLista = document.createElement("section");
-  contenedorLista.classList.add("c-lista");
-  contenedorLista.id = "la-lista";
-  contenedorLista.innerHTML = GenerarLista(data);
+    document.getElementById("btnSimular").addEventListener("click", async () => {
+        const moneda = document.getElementById("moneda").value;
+        const monto = parseFloat(document.getElementById("monto").value);
+        const resultadoDiv = document.getElementById("resultado");
 
-  // Agregar al DOM
-  root.appendChild(buscador);
-  root.appendChild(contenedorLista);
-}
+        if (!monto || monto <= 0) {
+            resultadoDiv.innerHTML = `<p class="error">❌ Ingresa un monto válido.</p>`;
+            return;
+        }
 
-// Filtrado del buscador
-function buscadorFuncion(texto, cryptos) {
-  if (texto.length >= 2) {
-    const filtrados = cryptos.filter(c => c.name.toLowerCase().includes(texto.toLowerCase()));
-    document.getElementById("la-lista").innerHTML = GenerarLista(filtrados);
-  } else {
-    document.getElementById("la-lista").innerHTML = GenerarLista(cryptos);
-  }
-}
+        resultadoDiv.innerHTML = "Calculando...";
 
-// Simulador
-async function Simular(id, nombre, precioActual) {
-  const root = document.getElementById("root");
-  root.innerHTML = `<h2>📊 Simulación de inversión en ${nombre}</h2>`;
+        try {
+            // Obtener precio actual y de hace 7 días
+            const hoyRes = await fetch(`https://api.coingecko.com/api/v3/coins/${moneda}`);
+            const actual = await hoyRes.json();
+            const precioActual = actual.market_data.current_price.usd;
 
-  const res = await fetch(`https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=7`);
-  const data = await res.json();
+            const hace7Res = await fetch(`https://api.coingecko.com/api/v3/coins/${moneda}/market_chart?vs_currency=usd&days=7`);
+            const hace7Data = await hace7Res.json();
+            const precioAntiguo = hace7Data.prices[0][1]; // primer registro (hace 7 días)
 
-  const precioPasado = data.prices[0][1];
-  const cambio = ((precioActual - precioPasado) / precioPasado) * 100;
+            // Cálculo
+            const cantidadComprada = monto / precioAntiguo;
+            const valorHoy = cantidadComprada * precioActual;
+            const ganancia = valorHoy - monto;
+            const porcentaje = ((valorHoy / monto - 1) * 100).toFixed(2);
 
-  root.innerHTML += `
-    <div class="sim-card">
-      <img src="https://assets.coingecko.com/coins/images/1/large/bitcoin.png" width="70">
-      <h3>${nombre}</h3>
-      <p>Precio hace 7 días: $${precioPasado.toFixed(2)}</p>
-      <p>Precio actual: $${precioActual.toFixed(2)}</p>
-      <p><b>Cambio:</b> ${cambio.toFixed(2)}%</p>
-      <label>💵 Inversión (USD):</label>
-      <input id="monto" type="number" placeholder="Ej: 100">
-      <button onclick="CalcularGanancia(${precioPasado}, ${precioActual})">Calcular</button>
-      <div id="resultado"></div>
-      <button onclick="Curiosidades()">⬅️ Volver</button>
-    </div>`;
-}
-
-// Calcula ganancia/pérdida
-function CalcularGanancia(precioPasado, precioActual) {
-  const monto = parseFloat(document.getElementById("monto").value);
-  if (!monto || monto <= 0) return alert("Ingresa un monto válido");
-  const cantidad = monto / precioPasado;
-  const valorActual = cantidad * precioActual;
-  const ganancia = valorActual - monto;
-
-  const resultado = document.getElementById("resultado");
-  resultado.innerHTML = `
-    <p>Valor actual: $${valorActual.toFixed(2)}</p>
-    <p style="color:${ganancia >= 0 ? 'limegreen' : 'tomato'}">
-      ${ganancia >= 0 ? 'Ganancia' : 'Pérdida'}: $${ganancia.toFixed(2)}
-    </p>`;
+            // Mostrar resultado
+            resultadoDiv.innerHTML = `
+                <div class="sim-tarjeta">
+                    <h3>${actual.name}</h3>
+                    <img src="${actual.image.small}" alt="${actual.name}">
+                    <p>📅 Inversión hace 7 días: <strong>$${monto.toFixed(2)}</strong></p>
+                    <p>💰 Valor actual: <strong>$${valorHoy.toFixed(2)}</strong></p>
+                    <p>📈 Cambio: <strong>${porcentaje}%</strong> (${ganancia >= 0 ? "ganancia" : "pérdida"})</p>
+                </div>
+            `;
+        } catch (error) {
+            resultadoDiv.innerHTML = `<p class="error">⚠️ Error al obtener los datos. Inténtalo más tarde.</p>`;
+            console.error(error);
+        }
+    });
 }

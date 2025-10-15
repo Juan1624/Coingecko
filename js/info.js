@@ -2,31 +2,30 @@ function Info() {
   const root = document.getElementById("root");
   root.innerHTML = "<h2>📘 Glosario Cripto</h2>";
 
-  // Diccionario de términos y definiciones
   const conceptos = {
-    "Blockchain": "Red descentralizada donde se registran todas las transacciones digitales. Es la base de las criptomonedas.",
-    "Token": "Unidad digital creada dentro de una blockchain, que puede representar valor, acceso o utilidad.",
-    "NFT (Token No Fungible)": "Activo digital único que representa propiedad sobre un ítem o arte, imposible de duplicar.",
-    "DeFi (Finanzas Descentralizadas)": "Conjunto de servicios financieros sin intermediarios, basados en contratos inteligentes.",
-    "Stablecoin": "Criptomoneda cuyo valor está vinculado a un activo estable, como el dólar estadounidense.",
-    "Gas Fee": "Tarifa pagada a los validadores de la red para procesar transacciones en blockchains como Ethereum.",
-    "Wallet (Billetera)": "Aplicación o dispositivo donde se almacenan y gestionan criptomonedas de forma segura.",
-    "Mining (Minería)": "Proceso mediante el cual se validan transacciones y se crean nuevas monedas en una red blockchain.",
-    "Halving": "Evento en Bitcoin que reduce a la mitad la recompensa por bloque, afectando su oferta y valor.",
-    "Smart Contract": "Programa autoejecutable en la blockchain que ejecuta condiciones predefinidas sin intermediarios.",
+    "Blockchain": "Red descentralizada donde se registran transacciones digitales; base de las criptomonedas.",
+    "Token": "Unidad digital dentro de una blockchain que representa valor, acceso o utilidad.",
+    "NFT": "Activo digital único que certifica propiedad sobre un ítem o arte.",
+    "DeFi": "Servicios financieros sin intermediarios, basados en contratos inteligentes.",
+    "Stablecoin": "Criptomoneda cuyo valor está vinculado a un activo estable como el dólar.",
+    "Gas Fee": "Tarifa pagada a la red para procesar transacciones.",
+    "Wallet": "Aplicación o dispositivo donde se guardan criptomonedas.",
+    "Mining": "Proceso que valida transacciones y crea nuevas monedas.",
+    "Halving": "Evento de Bitcoin que reduce a la mitad la recompensa de los mineros.",
+    "Smart Contract": "Programa que se ejecuta automáticamente al cumplirse condiciones definidas.",
   };
 
-  // Mostrar cada término con un diseño simple y limpio
-  let html = `<div class="glosario-container">`;
-  Object.entries(conceptos).forEach(([term, def]) => {
+  let html = '<div class="glosario-container">';
+  
+  for (const term in conceptos) {
     html += `
-      <div class="card glosario-item">
+      <div class="glosario-item">
         <h3>${term}</h3>
-        <p>${def}</p>
+        <p>${conceptos[term]}</p>
       </div>
     `;
-  });
-  html += `</div>`;
+  }
 
+  html += '</div>';
   root.innerHTML += html;
 }

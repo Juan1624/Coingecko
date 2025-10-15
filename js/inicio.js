@@ -43,7 +43,7 @@ async function cargarCriptos(categoria = "") {
     data.forEach(c => {
         contenedor.innerHTML += `
             <div class="card" onclick="Detalle('${c.id}')">
-                <img src="${c.image}" height="60">
+                <img src="${c.image}" height="90">
                 <p class="nombre">${c.name}</p>
                 <p class="precio">$${c.current_price.toLocaleString()}</p>
             </div>
