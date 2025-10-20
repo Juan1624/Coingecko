@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CryptoApp - CoinGecko</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Contenedor principal -->
+  <header class="menu-superior">
+    <div class="logo">CryptoApp 💰</div>
+    <nav class="nav-links">
+      <button onclick="Inicio()">Inicio</button>
+      <button onclick="Favoritos()">Favoritos</button>
+      <button onclick="Siminversion()">Simulador</button>
+      <button onclick="Info()">Glosario</button>
+    </nav>
+  </header>
+
+
   <main id="root">
     <h2>Bienvenido a CryptoApp 💰</h2>
-    <p>Selecciona una pestaña del menú para comenzar.</p>
+    <p>Explora criptomonedas, aprende y simula inversiones.</p>
   </main>
 
-  <!-- Menú inferior -->
-  <nav class="menu">
-  <button onclick="Inicio()">🏠 Inicio</button>
-  <button onclick="Favoritos()">❤️ Favoritos</button>
-  <button onclick="Siminversion()">💸 Simulador</button>
-  <button onclick="Info()">📘 Glosario Cripto</button>
-</nav>
-
-
-  <!-- Scripts (en orden de carga) -->
   <script src="js/inicio.js"></script>
   <script src="js/detalle.js"></script>
   <script src="js/favoritos.js"></script>
- <script src="js/Siminversion.js"></script>
   <script src="js/info.js"></script>
+  <script src="js/Siminversion.js"></script>
 </body>
 </html>

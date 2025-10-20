@@ -36,14 +36,13 @@ async function Siminversion() {
         resultadoDiv.innerHTML = "Calculando...";
 
         try {
-            // Obtener precio actual y de hace 7 días
             const hoyRes = await fetch(`https://api.coingecko.com/api/v3/coins/${moneda}`);
             const actual = await hoyRes.json();
             const precioActual = actual.market_data.current_price.usd;
 
             const hace7Res = await fetch(`https://api.coingecko.com/api/v3/coins/${moneda}/market_chart?vs_currency=usd&days=7`);
             const hace7Data = await hace7Res.json();
-            const precioAntiguo = hace7Data.prices[0][1]; // primer registro (hace 7 días)
+            const precioAntiguo = hace7Data.prices[0][1];
 
             // Cálculo
             const cantidadComprada = monto / precioAntiguo;
@@ -51,7 +50,6 @@ async function Siminversion() {
             const ganancia = valorHoy - monto;
             const porcentaje = ((valorHoy / monto - 1) * 100).toFixed(2);
 
-            // Mostrar resultado
             resultadoDiv.innerHTML = `
                 <div class="sim-tarjeta">
                     <h3>${actual.name}</h3>

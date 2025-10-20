@@ -34,7 +34,6 @@ async function Inicio() {
     select.appendChild(option);
   });
 
-  // Mostrar criptos iniciales
   cargarCriptos();
 }
 
@@ -60,14 +59,13 @@ async function cargarCriptos(categoria = "") {
   });
 }
 
-// 🔍 Función de búsqueda reutilizada del buscador
 async function buscarCripto() {
   const texto = document.getElementById("buscarInput").value.toLowerCase();
   const contenedor = document.getElementById("listaCriptos");
   contenedor.innerHTML = "";
 
   if (texto.length < 2) {
-    cargarCriptos(); // si borra el texto, vuelve a mostrar la lista
+    cargarCriptos(); 
     return;
   }
 

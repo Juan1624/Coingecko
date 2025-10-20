@@ -2,7 +2,10 @@ function Info() {
   const root = document.getElementById("root");
   root.innerHTML = `
     <h2>📘 Glosario Cripto</h2>
-    <div class="descripcion-info">Términos esenciales del mundo cripto para principiantes.</div>
+    <div class="descripcion-info">
+      Aprende los conceptos más importantes del mundo de las criptomonedas.
+    </div>
+    <input type="text" id="buscadorGlosario" placeholder="Buscar término...">
     <div class="glosario-grid" id="glosario"></div>
   `;
 
@@ -21,12 +24,32 @@ function Info() {
 
   const contenedor = document.getElementById("glosario");
 
-  for (const [term, def] of Object.entries(conceptos)) {
-    const card = document.createElement("div");
-    card.className = "tarjeta-info";
-    card.innerHTML = `<h3>${term}</h3><p>${def}</p>`;
-    contenedor.appendChild(card);
+  function mostrarConceptos(filtro = "") {
+    contenedor.innerHTML = "";
+    const filtroMin = filtro.toLowerCase();
+
+    for (const [term, def] of Object.entries(conceptos)) {
+      if (term.toLowerCase().includes(filtroMin) || def.toLowerCase().includes(filtroMin)) {
+        const card = document.createElement("div");
+        card.className = "tarjeta-info";
+        card.innerHTML = `
+          <h3>${term}</h3>
+          <p>${def}</p>
+        `;
+        contenedor.appendChild(card);
+      }
+    }
+
+    if (contenedor.innerHTML === "") {
+      contenedor.innerHTML = `<p style="color:#aaa;">No se encontraron resultados.</p>`;
+    }
   }
+
+  document.getElementById("buscadorGlosario").addEventListener("input", (e) => {
+    mostrarConceptos(e.target.value);
+  });
+
+  mostrarConceptos(); 
 
   document.getElementById("root").style.paddingBottom = "90px";
 }
